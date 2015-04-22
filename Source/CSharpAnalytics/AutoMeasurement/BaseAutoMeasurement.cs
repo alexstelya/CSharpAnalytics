@@ -128,7 +128,7 @@ namespace CSharpAnalytics
         /// Indicates if internet connectivity is available.
         /// </summary>
         /// <returns>True if the internet is available to use, false otherwise.</returns>
-        public Func<bool> IsInternetAvailable;
+        protected abstract bool IsInternetAvailable();
 
         /// <summary>
         /// Opt the user in or out of analytics for this application install.

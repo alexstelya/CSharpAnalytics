@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -20,18 +19,7 @@ namespace CSharpAnalytics.Serializers
         /// </summary>
         public static string FolderPath
         {
-            get
-            {
-                if (folderPath == null)
-                {
-                    throw new NullReferenceException(
-                        "The path to the folder to save the offline data is not installed");
-                }
-
-                return folderPath;
-
-                //return folderPath ?? (folderPath = GetDefaultFolderPath());
-            }
+            get { return folderPath ?? (folderPath = GetDefaultFolderPath()); }
             set { folderPath = value; }
         }
 
@@ -39,17 +27,17 @@ namespace CSharpAnalytics.Serializers
         /// Determine a default file system path for the serialization of the data.
         /// </summary>
         /// <returns></returns>
-        //private static string GetDefaultFolderPath()
-        //{
-        //    var appDataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+        private static string GetDefaultFolderPath()
+        {
+            var appDataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
 
-        //    var customAttributes = Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-        //    var folderName = customAttributes.Length > 0
-        //        ? ((AssemblyCompanyAttribute)customAttributes[0]).Company
-        //        : "CSharpAnalytics";
+            var customAttributes = Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+            var folderName = customAttributes.Length > 0
+                ? ((AssemblyCompanyAttribute)customAttributes[0]).Company
+                : "CSharpAnalytics";
 
-        //    return Path.Combine(appDataPath, folderName);
-        //}
+            return Path.Combine(appDataPath, folderName);
+        }
 
         /// <summary>
         /// Restore an object from local folder storage.
@@ -71,9 +59,6 @@ namespace CSharpAnalytics.Serializers
                     {
                         if (inputStream.Length == 0)
                         {
-                            inputStream.Close();
-                            File.Delete(file);
-
                             return default(T);
                         }
 
